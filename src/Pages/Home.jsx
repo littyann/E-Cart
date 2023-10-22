@@ -3,6 +3,7 @@ import { Button, Card, Col, Row } from 'react-bootstrap'
 import useFetch from '../Hooks/useFetch'
 import { useDispatch } from 'react-redux'
 import { addToWhishlist } from '../redux/slices/whishlistSlice'
+import { addToCart } from '../redux/slices/cartSlice'
 
 function Home() {
   const dispatch = useDispatch()
@@ -25,7 +26,7 @@ function Home() {
             <Button onClick={()=>dispatch(addToWhishlist(product))} className='btn btn-light'>
               <i className='fa-solid fa-heart text-danger fa-2x'></i>
               </Button>
-              <Button className='btn btn-light'>
+              <Button onClick={()=>dispatch(addToCart(product))} className='btn btn-light'>
               <i className='fa-solid fa-cart-plus text-success fa-2x'></i>
               </Button>
             </div>
