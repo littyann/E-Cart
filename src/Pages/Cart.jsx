@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeFromCart } from '../redux/slices/cartSlice'
-import { Link } from 'react-router-dom'
+import { emptyCart, removeFromCart } from '../redux/slices/cartSlice'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Cart() {
 const cartArray = useSelector(state=>state.cartReducer)
@@ -9,6 +9,9 @@ const cartArray = useSelector(state=>state.cartReducer)
 const dispatch = useDispatch()
 // total
 const [total,setTotal] = useState(0)
+const navigate= useNavigate()
+
+
 const getCartTotal = ()=>{
   if(cartArray.length>0){
     setTotal(cartArray.map(item=>item.price).reduce((p1,p2)=>p1+p2))
@@ -17,13 +20,22 @@ const getCartTotal = ()=>{
   }
 }
 
+const handleCart = ()=>{
+  dispatch(emptyCart())
+  alert("Order Successfully Placed.....Thank You for purchasing with us!!!")
+  navigate('/')
+}
+
 useEffect(()=>{
   getCartTotal()
 },[cartArray])
 
   return (
     <div className='container' style={{marginTop:"100px"}}>
-      <div className="row mt-5">
+     { 
+     cartArray.length>0?
+     
+     <div className="row mt-5">
         <div className="col-lg-7">
           <table className="table shadow border">
             <thead>
@@ -61,19 +73,23 @@ useEffect(()=>{
               <h4 className="mt-3">Total Products : <span>{cartArray.length}</span></h4>
               <h4>Total : <span  className="text-danger fw-bolder fs-2">$ {total}</span></h4>
               <div className="d-grid mt-5">
-                <button className="btn btn-success rounded">Check Out</button>
+                <button onClick={handleCart} className="btn btn-success rounded">Check Out</button>
               </div>
             </div>
           </div>
              
-      </div>:
+      </div>
+      :
+
       <div style={{height:"60vh"}} className='w-100 d-flex flex-column justify-content-center align-items-center' >
           <img height={'250px'} src="https://media2.giphy.com/media/fscIxPfKjPyShbwUS5/giphy.gif?cid=6c09b9521b4b7adc2ede5194a30481a1994f52968b0d1f9d&rid=giphy.gif&ct=s" alt="" />
           <h3 className='fw-bolder text-primary'>Your Cart is Empty</h3>
           <Link style={{textDecoration:"none"}} className='btn btn-success rounded mt-3' to={'/'}>Back To Home</Link>
-
+     
         </div>
+}
     </div>
+            
   )
 }
 
